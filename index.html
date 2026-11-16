@@ -5,215 +5,297 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sem Limite Rede — Download</title>
   <meta name="description" content="Sem Limite Rede: programa de projetos de rede FTTH da Sem Limite Telecom. Abre e salva no formato do Google Earth (KMZ/KML).">
+  <meta name="theme-color" content="#17478C">
   <link rel="icon" type="image/png" href="assets/simbolo.png">
   <style>
     @font-face { font-family: "Inter"; font-weight: 100 900; font-display: swap; src: url("assets/fonts/inter-latin.woff2") format("woff2"); }
     @font-face { font-family: "Exo 2"; font-weight: 100 900; font-display: swap; src: url("assets/fonts/exo2-latin.woff2") format("woff2"); }
+
+    /* Cores do manual de marca: azul #17478C, laranja #D66A33, azul do arco #3BB0E3, grafite #333 */
     :root {
-      --brand: #17478C; --brand-2: #1f5aab; --accent: #D66A33; --sky: #3BB0E3;
-      --bg: #f4f7fb; --panel: #ffffff; --panel-2: #eef3f9; --line: #d7dee9; --text: #1b2433; --muted: #5e6b80;
-      --shadow: 0 1px 2px rgba(15,23,42,.06), 0 8px 28px rgba(15,23,42,.10);
-      --ok: #15803d;
+      --azul: #17478C; --azul-esc: #0f3368; --laranja: #D66A33; --laranja-esc: #bd5726; --ceu: #3BB0E3; --grafite: #333333;
+      --bg: #ffffff; --bg-2: #f3f5f9; --card: #ffffff; --line: #dfe4ec; --rule: #7a7a7a;
+      --text: #2b2f36; --muted: #5d6676; --titulo: var(--azul); --logo-txt: var(--grafite);
+      --shadow: 0 2px 4px rgba(23,71,140,.06), 0 14px 34px rgba(23,71,140,.12);
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --brand: #2b67c0; --brand-2: #3a78d4; --accent: #e07a45; --sky: #4cc0f0;
-        --bg: #0c1524; --panel: #121d30; --panel-2: #192740; --line: #2a3a56; --text: #e6ebf3; --muted: #94a3ba;
-        --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.45); --ok: #22c55e;
+        --bg: #0b1730; --bg-2: #0f1f3d; --card: #13284c; --line: #24406d; --rule: #4d6488;
+        --text: #e8edf5; --muted: #a3b2c9; --titulo: #8fc3f0; --logo-txt: #ffffff;
+        --shadow: 0 2px 4px rgba(0,0,0,.3), 0 14px 34px rgba(0,0,0,.4);
       }
-      .logo-light { display: none !important; }
-      .logo-dark { display: block !important; }
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 "Inter", "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
-    h1, h2, h3 { font-family: "Exo 2", "Inter", sans-serif; line-height: 1.15; margin: 0; }
-    a { color: var(--brand); }
-    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 "Inter", "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    h1, h2, h3 { font-family: "Exo 2", "Inter", sans-serif; line-height: 1.05; margin: 0; text-transform: uppercase; }
+    a { color: var(--laranja); }
+    .wrap { max-width: 1140px; margin: 0 auto; padding: 0 20px; position: relative; }
+    code { font-size: .92em; background: var(--bg-2); padding: 1px 6px; border-radius: 4px; }
 
-    /* topo */
-    header.top { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--panel) 90%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
-    header.top .wrap { display: flex; align-items: center; gap: 16px; height: 62px; }
-    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
-    .brand img { width: 34px; height: 34px; border-radius: 8px; }
-    .brand b { font-family: "Exo 2", sans-serif; font-size: 19px; }
-    .brand b span { color: var(--brand); }
-    @media (prefers-color-scheme: dark) { .brand b span { color: var(--sky); } }
-    nav.links { margin-left: auto; display: flex; gap: 22px; font-size: 15px; }
-    nav.links a { color: var(--muted); text-decoration: none; }
-    nav.links a:hover { color: var(--text); }
-    .bar { height: 3px; background: linear-gradient(90deg, var(--brand), var(--sky) 55%, var(--accent)); }
+    /* ---------- topo (como a assinatura do logo: símbolo + nome grafite + complemento laranja) ---------- */
+    header.top { position: sticky; top: 0; z-index: 20; background: var(--bg); box-shadow: 0 1px 0 var(--line); }
+    header.top .wrap { display: flex; align-items: center; gap: 16px; height: 68px; }
+    .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; }
+    .brand img { width: 42px; height: 42px; }
+    .brand .nome { display: flex; flex-direction: column; line-height: 1; font-family: "Exo 2", sans-serif; text-transform: uppercase; }
+    .brand .nome b { font-size: 20px; font-weight: 700; letter-spacing: 1.5px; color: var(--logo-txt); }
+    .brand .nome small { font-size: 12px; font-weight: 700; letter-spacing: 4.5px; color: var(--laranja); align-self: flex-end; margin-top: 3px; }
+    nav.links { margin-left: auto; display: flex; align-items: center; gap: 26px; }
+    nav.links a { color: var(--text); text-decoration: none; font-family: "Exo 2", sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; font-size: 14px; }
+    nav.links a:hover { color: var(--laranja); }
+    nav.links a.mini { background: var(--laranja); color: #fff; padding: 8px 16px; border-radius: 4px; }
+    nav.links a.mini:hover { background: var(--laranja-esc); color: #fff; }
+    .arco { height: 4px; background: linear-gradient(90deg, transparent, var(--ceu) 18%, var(--ceu) 60%, var(--laranja) 92%, transparent); }
 
-    /* hero */
-    .hero { padding: 64px 0 40px; }
-    .hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
-    .eyebrow { display: inline-block; font-size: 13px; font-weight: 600; color: var(--accent); letter-spacing: 1.4px; text-transform: uppercase; margin-bottom: 14px; }
-    .hero h1 { font-size: clamp(32px, 4.4vw, 50px); font-weight: 800; letter-spacing: -.5px; }
-    .hero h1 em { font-style: normal; color: var(--brand); }
-    @media (prefers-color-scheme: dark) { .hero h1 em { color: var(--sky); } }
-    .lead { font-size: 18px; color: var(--muted); margin: 18px 0 28px; max-width: 34em; }
-    .cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-    .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 10px; font-weight: 600; font-size: 16px; text-decoration: none; border: 1px solid transparent; transition: transform .12s, background .12s; }
-    .btn svg { width: 20px; height: 20px; }
-    .btn.primary { background: var(--brand); color: #fff; box-shadow: 0 6px 18px color-mix(in srgb, var(--brand) 40%, transparent); }
-    .btn.primary:hover { background: var(--brand-2); transform: translateY(-1px); }
-    .btn.ghost { color: var(--text); border-color: var(--line); background: var(--panel); }
-    .btn.ghost:hover { border-color: var(--brand); }
-    .meta { margin-top: 14px; font-size: 14px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 16px; }
-    .meta b { color: var(--text); font-weight: 600; }
+    /* ---------- botões (etiqueta laranja inclinada, como nas peças) ---------- */
+    .btn { position: relative; display: inline-flex; align-items: center; gap: 10px; padding: 16px 30px; font-family: "Exo 2", sans-serif; font-weight: 800; font-size: 17px; letter-spacing: .8px; text-transform: uppercase; text-decoration: none; color: #fff; border: 0; isolation: isolate; transition: transform .14s; }
+    .btn::before { content: ""; position: absolute; inset: 0; z-index: -1; transform: skewX(-9deg); border-radius: 3px; transition: background .14s; }
+    .btn svg { width: 21px; height: 21px; }
+    .btn.laranja::before { background: var(--laranja); box-shadow: 0 10px 24px rgba(214,106,51,.38); }
+    .btn.laranja:hover { transform: translateY(-2px); }
+    .btn.laranja:hover::before { background: var(--laranja-esc); }
+    .btn.vazado::before { background: transparent; border: 2px solid rgba(255,255,255,.75); }
+    .btn.vazado:hover::before { background: rgba(255,255,255,.12); }
+
+    /* ---------- abertura azul com borda orgânica ---------- */
+    .hero { position: relative; background: var(--azul); color: #fff; padding: 70px 0 150px; overflow: hidden; }
+    .hero::after { /* bolha clara no canto, igual ao fundo das peças */
+      content: ""; position: absolute; width: 560px; height: 560px; right: -170px; top: -240px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(59,176,227,.28), rgba(59,176,227,0) 68%); pointer-events: none; }
+    .hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 54px; align-items: center; z-index: 2; }
+    .etiqueta { display: inline-block; background: var(--laranja); color: #fff; font-family: "Exo 2", sans-serif; font-weight: 800; text-transform: uppercase; letter-spacing: 1.6px; font-size: 13px; padding: 6px 14px; margin-bottom: 20px; }
+    .hero h1 { font-size: clamp(38px, 5.4vw, 66px); font-weight: 900; letter-spacing: .5px; }
+    .hero h1 span { display: block; color: #ffb488; }
+    .zigue { display: block; width: 190px; height: 26px; margin: 24px 0 20px; }
+    .lead { font-size: 18px; color: rgba(255,255,255,.88); margin: 0 0 30px; max-width: 32em; }
+    .lead b { color: #fff; }
+    .cta { display: flex; flex-wrap: wrap; gap: 18px 22px; align-items: center; }
+    .meta { margin-top: 22px; font-size: 14px; color: rgba(255,255,255,.78); display: flex; flex-wrap: wrap; gap: 6px 18px; }
+    .meta b { color: #fff; font-weight: 700; }
+    .borda-org { position: absolute; left: 0; right: 0; bottom: -1px; width: 100%; height: 120px; z-index: 1; display: block; }
+    .borda-org { fill: var(--bg); }
+
+    /* faixas diagonais arredondadas (laranja + azul translúcido) atrás da ilustração */
+    .palco { position: relative; }
+    .faixa { position: absolute; height: 92px; border-radius: 46px; transform: rotate(-32deg); z-index: 0; }
+    .faixa.f1 { width: 420px; background: var(--laranja); right: -150px; top: -20px; }
+    .faixa.f2 { width: 460px; background: rgba(143,195,240,.45); left: -120px; bottom: -40px; }
 
     /* ilustração do programa (desenho, sem dados reais) */
-    .shot { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
-    .shot-bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--line); font-size: 12px; color: var(--muted); }
-    .shot-bar img { width: 16px; height: 16px; border-radius: 4px; }
-    .shot-bar span { margin-left: 8px; }
-    .shot-tools { display: flex; gap: 6px; padding: 7px 10px; background: var(--panel-2); border-bottom: 1px solid var(--line); }
-    .shot-tools i { height: 18px; border-radius: 5px; background: var(--line); display: block; }
-    .shot-tools i.on { background: var(--accent); }
+    .shot { position: relative; z-index: 1; background: #fff; border-radius: 12px; box-shadow: 0 30px 60px rgba(4,18,46,.45); overflow: hidden; color: #2b2f36; }
+    .shot-bar { overflow: hidden; white-space: nowrap; display: flex; align-items: center; gap: 14px; padding: 9px 12px; background: var(--azul); color: rgba(255,255,255,.9); font-size: 12px; font-weight: 500; }
+    .shot-bar img { width: 18px; height: 18px; }
+    .shot-tools { display: flex; gap: 6px; padding: 7px 10px; background: #f3f5f9; border-bottom: 1px solid #dfe4ec; }
+    .shot-tools i { height: 18px; border-radius: 4px; background: #dfe4ec; display: block; }
+    .shot-tools i.on { background: var(--laranja); }
     .shot-body { display: grid; grid-template-columns: 30% 1fr; height: 300px; }
-    .shot-side { border-right: 1px solid var(--line); padding: 10px; display: flex; flex-direction: column; gap: 7px; }
-    .shot-side i { display: block; height: 9px; border-radius: 4px; background: var(--panel-2); }
-    .shot-side i.h { height: 13px; background: var(--line); width: 60%; margin-top: 6px; }
+    .shot-side { border-right: 1px solid #dfe4ec; padding: 10px; display: flex; flex-direction: column; gap: 7px; background: #fff; }
+    .shot-side i { display: block; height: 9px; border-radius: 4px; background: #eef1f6; }
+    .shot-side i.h { height: 12px; background: rgba(23,71,140,.22); width: 58%; margin-top: 6px; }
     .shot-map { position: relative; background: linear-gradient(135deg, #2b3a2a, #3c4a34 40%, #4a4a3a); }
     .shot-map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 
-    /* seções */
-    section.block { padding: 56px 0; }
-    section.block h2 { font-size: clamp(26px, 3vw, 34px); font-weight: 800; }
-    .sub { color: var(--muted); margin: 10px 0 30px; max-width: 46em; }
-    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 22px; box-shadow: var(--shadow); }
-    .card .ic { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--brand) 12%, transparent); color: var(--brand); margin-bottom: 14px; }
-    @media (prefers-color-scheme: dark) { .card .ic { color: var(--sky); } }
-    .card .ic svg { width: 24px; height: 24px; }
-    .card h3 { font-size: 19px; margin-bottom: 6px; }
+    /* ---------- seções ---------- */
+    section.block { padding: 70px 0; position: relative; }
+    .titulo { margin-bottom: 34px; max-width: 760px; }
+    .titulo h2 { font-size: clamp(30px, 3.8vw, 46px); font-weight: 900; color: var(--laranja); }
+    .titulo h2 span { color: var(--titulo); }
+    .titulo .regua { height: 3px; width: 100%; max-width: 420px; background: var(--rule); margin: 16px 0 14px; }
+    .titulo p { margin: 0; color: var(--muted); font-size: 17px; }
+
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .card { background: var(--card); border-radius: 14px; padding: 26px 24px 24px; box-shadow: var(--shadow); border-bottom: 4px solid var(--azul); transition: transform .15s, border-color .15s; }
+    .card:hover { transform: translateY(-3px); border-bottom-color: var(--laranja); }
+    .card .ic { width: 52px; height: 52px; border-radius: 13px; display: flex; align-items: center; justify-content: center; color: #fff; margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--azul) 0 55%, var(--laranja) 55%); }
+    .card .ic svg { width: 26px; height: 26px; }
+    .card h3 { font-size: 20px; font-weight: 800; color: var(--titulo); margin-bottom: 8px; letter-spacing: .3px; }
     .card p { margin: 0; color: var(--muted); font-size: 15px; }
-    .alt { background: var(--panel); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 
-    .steps { counter-reset: s; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-    .step { position: relative; padding: 22px 22px 22px 70px; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; }
-    .step::before { counter-increment: s; content: counter(s); position: absolute; left: 20px; top: 20px; width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; font-family: "Exo 2", sans-serif; }
-    .step h3 { font-size: 17px; margin-bottom: 4px; }
+    /* instalar: fundo cinza-claro, passos com numeral laranja grande */
+    .suave { background: var(--bg-2); }
+    .instalar { display: grid; grid-template-columns: 1.6fr 1fr; gap: 34px; align-items: start; }
+    .steps { counter-reset: s; display: flex; flex-direction: column; gap: 14px; }
+    .step { position: relative; display: grid; grid-template-columns: 64px 1fr; gap: 6px 16px; align-items: start; background: var(--card); border-radius: 12px; padding: 18px 20px; box-shadow: var(--shadow); }
+    .step::before { counter-increment: s; content: counter(s); grid-row: span 2; font-family: "Exo 2", sans-serif; font-weight: 900; font-size: 56px; line-height: .9; color: var(--laranja); text-align: center; }
+    .step h3 { font-size: 18px; font-weight: 800; color: var(--titulo); }
     .step p { margin: 0; color: var(--muted); font-size: 15px; }
-    .note { margin-top: 18px; padding: 14px 18px; border-radius: 10px; background: color-mix(in srgb, var(--accent) 12%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); font-size: 15px; }
+    .requisitos { background: var(--azul); color: #fff; border-radius: 14px; padding: 26px 26px 22px; position: relative; overflow: hidden; }
+    .requisitos::after { content: ""; position: absolute; width: 220px; height: 64px; border-radius: 32px; background: var(--laranja); transform: rotate(-32deg); right: -80px; bottom: -6px; opacity: .95; }
+    .requisitos h3 { font-size: 22px; font-weight: 900; color: #ffb488; margin-bottom: 12px; }
+    .requisitos ul { list-style: none; margin: 0 0 18px; padding: 0; position: relative; z-index: 1; }
+    .requisitos li { display: flex; gap: 10px; align-items: flex-start; padding: 5px 0; font-size: 15.5px; }
+    .requisitos li svg { flex: none; width: 20px; height: 20px; color: #ffb488; margin-top: 2px; }
+    .note { margin-top: 22px; padding: 16px 20px; background: var(--card); border-left: 5px solid var(--laranja); border-radius: 0 10px 10px 0; font-size: 15px; box-shadow: var(--shadow); }
+    .note b { color: var(--laranja); }
     .hash { margin-top: 14px; font-size: 13px; color: var(--muted); word-break: break-all; }
-    .hash code { font-size: 12.5px; color: var(--text); background: var(--panel-2); padding: 2px 6px; border-radius: 5px; }
+    .hash code { font-size: 12.5px; color: var(--text); background: var(--card); }
 
-    details.faq { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0 18px; margin-bottom: 10px; }
-    details.faq summary { cursor: pointer; padding: 16px 0; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 10px; }
-    details.faq summary::after { content: "+"; color: var(--muted); font-size: 20px; line-height: 1; }
-    details.faq[open] summary::after { content: "–"; }
-    details.faq p { margin: 0 0 16px; color: var(--muted); }
+    details.faq { border-bottom: 3px solid var(--line); }
+    details.faq summary { cursor: pointer; padding: 18px 0; font-family: "Exo 2", sans-serif; font-weight: 800; font-size: 19px; color: var(--titulo); list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    details.faq summary::-webkit-details-marker { display: none; }
+    details.faq summary::after { content: "+"; flex: none; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: var(--laranja); color: #fff; font-size: 22px; border-radius: 4px; transform: skewX(-9deg); }
+    details.faq[open] summary::after { content: "–"; background: var(--azul); }
+    details.faq p { margin: 0 0 18px; color: var(--muted); max-width: 52em; }
 
-    .final { text-align: center; }
-    .final .cta { justify-content: center; margin-top: 22px; }
-    footer { padding: 30px 0 40px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
-    footer .wrap { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-    footer img { height: 46px; }
-    .logo-dark { display: none; }
+    /* chamada final: bloco azul com borda orgânica em cima */
+    .final { position: relative; background: var(--azul); color: #fff; text-align: center; padding: 140px 0 90px; overflow: hidden; }
+    .final .borda-org { top: -1px; bottom: auto; transform: scaleY(-1); }
+    .final h2 { font-size: clamp(32px, 4.4vw, 54px); font-weight: 900; }
+    .final h2 span { color: #ffb488; }
+    .final .zigue { margin: 20px auto 30px; }
+    .final .cta { justify-content: center; }
+    .final .faixa.f1 { width: 300px; height: 72px; right: -90px; top: auto; bottom: 30px; }
+    .final .faixa.f2 { width: 320px; height: 72px; left: -120px; bottom: auto; top: 120px; }
 
-    @media (max-width: 860px) {
-      .hero .wrap, .grid, .steps { grid-template-columns: minmax(0, 1fr); }
-      .hero .wrap > *, .grid > *, .steps > * { min-width: 0; }
-      .btn { padding: 13px 18px; }
-      .hero { padding-top: 36px; }
-      nav.links { display: none; }
+    footer { background: var(--azul-esc); color: rgba(255,255,255,.72); padding: 28px 0; font-size: 14px; }
+    footer .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    footer img { height: 78px; }
+
+    @media (max-width: 900px) {
+      .hero .wrap, .grid, .instalar { grid-template-columns: minmax(0, 1fr); }
+      .hero .wrap > *, .grid > *, .instalar > * { min-width: 0; }
+      .hero { padding: 40px 0 120px; }
+      .palco { margin-top: 10px; }
+      nav.links a:not(.mini) { display: none; }
       .shot-body { height: 230px; }
+      .faixa.f1 { width: 300px; right: -140px; }
+      .btn { padding: 14px 22px; font-size: 16px; }
+      footer .wrap { justify-content: center; text-align: center; }
+    }
+    @media (max-width: 460px) {
+      .brand .nome b { font-size: 17px; }
+      nav.links a.mini { padding: 7px 12px; font-size: 13px; }
+      .step { grid-template-columns: 44px 1fr; padding: 16px; }
+      .step::before { font-size: 42px; }
     }
   </style>
 </head>
 <body>
+  <!-- símbolos reutilizados -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-down" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 15V3M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" d="M4 13.5 9.5 19 20 5"/></symbol>
+    <symbol id="i-zigue" viewBox="0 0 190 26"><path fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M3 22 21 4l18 18 18-18 18 18 18-18 18 18 18-18 18 18 18-18 18 18"/></symbol>
+    <symbol id="i-borda" viewBox="0 0 1440 120" preserveAspectRatio="none"><path d="M0 70C180 10 330 0 520 38s330 82 560 60c150-14 250-56 360-86V120H0z"/></symbol>
+  </svg>
+
   <header class="top">
     <div class="wrap">
-      <a class="brand" href="#"><img src="assets/simbolo.png" alt=""><b>Sem Limite <span>Rede</span></b></a>
-      <nav class="links"><a href="#recursos">Recursos</a><a href="#instalar">Instalar</a><a href="#duvidas">Dúvidas</a><a id="navReleases" href="https://github.com/DuarteJJ/sem-limite-rede/releases">Versões</a></nav>
+      <a class="brand" href="#"><img src="assets/simbolo.png" alt=""><span class="nome"><b>Sem Limite</b><small>Rede</small></span></a>
+      <nav class="links"><a href="#recursos">Recursos</a><a href="#instalar">Instalar</a><a href="#duvidas">Dúvidas</a><a href="https://github.com/DuarteJJ/sem-limite-rede/releases">Versões</a><a class="mini dl" href="https://github.com/DuarteJJ/sem-limite-rede/releases/latest/download/Sem-Limite-Rede-Setup.exe">Baixar</a></nav>
     </div>
-    <div class="bar"></div>
+    <div class="arco"></div>
   </header>
 
   <main>
     <section class="hero">
       <div class="wrap">
         <div>
-          <span class="eyebrow">Sem Limite Telecom · Projetos FTTH</span>
-          <h1>Projete a rede de fibra <em>do jeito que a equipe já conhece.</em></h1>
-          <p class="lead">Programa para Windows no estilo do Google Earth Pro, com ficha técnica de cada caixa, diagrama de fusões, rastreamento de fibra e cálculo de potência. Abre e salva <b>KMZ/KML</b>.</p>
+          <span class="etiqueta">Sem Limite Telecom · Projetos FTTH</span>
+          <h1>Projete a rede<span>sem limite.</span></h1>
+          <svg class="zigue" aria-hidden="true"><use href="#i-zigue"/></svg>
+          <p class="lead">O programa de projetos de fibra da Sem Limite, no jeito do <b>Google Earth Pro</b>: ficha técnica de cada caixa, diagrama de fusões, rastreamento de fibra e cálculo de potência. Abre e salva <b>KMZ/KML</b>.</p>
           <div class="cta">
-            <a class="btn primary dl" href="https://github.com/DuarteJJ/sem-limite-rede/releases/latest/download/Sem-Limite-Rede-Setup.exe">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>
-              Baixar para Windows
-            </a>
-            <a class="btn ghost" href="#instalar">Como instalar</a>
+            <a class="btn laranja dl" href="https://github.com/DuarteJJ/sem-limite-rede/releases/latest/download/Sem-Limite-Rede-Setup.exe"><svg><use href="#i-down"/></svg>Baixar para Windows</a>
+            <a class="btn vazado" href="#instalar">Como instalar</a>
           </div>
           <div class="meta"><span>Versão <b id="ver">1.0.0</b></span><span><b id="size">79 MB</b></span><span>Windows 10 e 11 (64 bits)</span><span id="date"></span></div>
         </div>
 
-        <div class="shot" aria-label="Ilustração do programa">
-          <div class="shot-bar"><img src="assets/simbolo.png" alt="">Arquivo&nbsp;&nbsp;Editar&nbsp;&nbsp;Visualizar&nbsp;&nbsp;Adicionar&nbsp;&nbsp;Ferramentas<span></span></div>
-          <div class="shot-tools"><i style="width:22px"></i><i class="on" style="width:70px"></i><i style="width:46px"></i><i style="width:46px"></i><i style="width:46px"></i><i style="width:46px"></i><i style="width:24px;margin-left:auto"></i></div>
-          <div class="shot-body">
-            <div class="shot-side"><i class="h"></i><i></i><i class="h"></i><i></i><i></i><i style="width:80%"></i><i></i><i style="width:70%"></i><i class="h"></i><i></i><i style="width:60%"></i></div>
-            <div class="shot-map">
-              <!-- rede fictícia, só ilustração -->
-              <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-                <g stroke="rgba(255,255,255,.10)" stroke-width="10"><path d="M0 70H400M0 160H400M0 245H400M80 0V300M200 0V300M320 0V300"/></g>
-                <path d="M30 70H200V160H320V245" fill="none" stroke="#1d4ed8" stroke-width="5"/>
-                <path d="M200 70V20M80 160H200M80 160V245H200" fill="none" stroke="#22c55e" stroke-width="4"/>
-                <path d="M320 160V70H390" fill="none" stroke="#22c55e" stroke-width="4" stroke-dasharray="10 7"/>
-                <g fill="#e2e8f0" stroke="#0f172a" stroke-width="1.5">
-                  <circle cx="30" cy="70" r="4"/><circle cx="115" cy="70" r="4"/><circle cx="200" cy="20" r="4"/><circle cx="140" cy="160" r="4"/><circle cx="80" cy="200" r="4"/><circle cx="140" cy="245" r="4"/><circle cx="260" cy="160" r="4"/><circle cx="320" cy="205" r="4"/><circle cx="355" cy="70" r="4"/>
-                </g>
-                <g stroke="#0f172a" stroke-width="1.6">
-                  <rect x="190" y="60" width="20" height="20" rx="4" fill="#3b82f6"/>
-                  <path d="M200 148 211 154v12l-11 6-11-6v-12z" fill="#f97316"/>
-                  <rect x="70" y="150" width="20" height="20" rx="4" fill="#22c55e"/>
-                  <rect x="190" y="235" width="20" height="20" rx="4" fill="#f59e0b"/>
-                  <rect x="310" y="235" width="20" height="20" rx="4" fill="#22c55e"/>
-                  <rect x="310" y="60" width="20" height="20" rx="4" fill="#ef4444"/>
-                </g>
-                <g fill="#fff" font-family="Inter, sans-serif" font-size="11" font-weight="600" paint-order="stroke" stroke="rgba(15,23,42,.8)" stroke-width="3">
-                  <text x="95" y="155">CTO-012</text><text x="216" y="152">CEO-03</text><text x="216" y="66">POP</text><text x="216" y="250">CTO-018</text>
-                </g>
-              </svg>
+        <div class="palco">
+          <div class="faixa f1"></div>
+          <div class="faixa f2"></div>
+          <div class="shot" aria-label="Ilustração do programa">
+            <div class="shot-bar"><img src="assets/simbolo.png" alt=""><span>Arquivo</span><span>Editar</span><span>Visualizar</span><span>Adicionar</span><span>Ferramentas</span></div>
+            <div class="shot-tools"><i style="width:22px"></i><i class="on" style="width:70px"></i><i style="width:46px"></i><i style="width:46px"></i><i style="width:46px"></i><i style="width:46px"></i><i style="width:24px;margin-left:auto"></i></div>
+            <div class="shot-body">
+              <div class="shot-side"><i class="h"></i><i></i><i class="h"></i><i></i><i></i><i style="width:80%"></i><i></i><i style="width:70%"></i><i class="h"></i><i></i><i style="width:60%"></i></div>
+              <div class="shot-map">
+                <!-- rede fictícia, só ilustração -->
+                <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+                  <g stroke="rgba(255,255,255,.10)" stroke-width="10"><path d="M0 70H400M0 160H400M0 245H400M80 0V300M200 0V300M320 0V300"/></g>
+                  <path d="M30 70H200V160H320V245" fill="none" stroke="#3BB0E3" stroke-width="5"/>
+                  <path d="M200 70V20M80 160H200M80 160V245H200" fill="none" stroke="#22c55e" stroke-width="4"/>
+                  <path d="M320 160V70H390" fill="none" stroke="#22c55e" stroke-width="4" stroke-dasharray="10 7"/>
+                  <g fill="#e2e8f0" stroke="#0f172a" stroke-width="1.5">
+                    <circle cx="30" cy="70" r="4"/><circle cx="115" cy="70" r="4"/><circle cx="200" cy="20" r="4"/><circle cx="140" cy="160" r="4"/><circle cx="80" cy="200" r="4"/><circle cx="140" cy="245" r="4"/><circle cx="260" cy="160" r="4"/><circle cx="320" cy="205" r="4"/><circle cx="355" cy="70" r="4"/>
+                  </g>
+                  <g stroke="#0f172a" stroke-width="1.6">
+                    <rect x="190" y="60" width="20" height="20" rx="4" fill="#17478C"/>
+                    <path d="M200 148 211 154v12l-11 6-11-6v-12z" fill="#D66A33"/>
+                    <rect x="70" y="150" width="20" height="20" rx="4" fill="#22c55e"/>
+                    <rect x="190" y="235" width="20" height="20" rx="4" fill="#f59e0b"/>
+                    <rect x="310" y="235" width="20" height="20" rx="4" fill="#22c55e"/>
+                    <rect x="310" y="60" width="20" height="20" rx="4" fill="#ef4444"/>
+                  </g>
+                  <g fill="#fff" font-family="Inter, sans-serif" font-size="11" font-weight="600" paint-order="stroke" stroke="rgba(15,23,42,.8)" stroke-width="3">
+                    <text x="95" y="155">CTO-012</text><text x="216" y="152">CEO-03</text><text x="216" y="66">POP</text><text x="216" y="250">CTO-018</text>
+                  </g>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
       </div>
+      <svg class="borda-org" aria-hidden="true"><use href="#i-borda"/></svg>
     </section>
 
-    <section class="block alt" id="recursos">
+    <section class="block" id="recursos">
       <div class="wrap">
-        <h2>Tudo o que o projeto de rede precisa</h2>
-        <p class="sub">Do poste à porta PON da OLT, num programa só, sem perder a compatibilidade com o Google Earth.</p>
+        <div class="titulo">
+          <h2>Tudo o que o projeto <span>de rede precisa</span></h2>
+          <div class="regua"></div>
+          <p>Do poste à porta PON da OLT, num programa só, sem perder a compatibilidade com o Google Earth.</p>
+        </div>
         <div class="grid">
-          <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></div><h3>Jeito Google Earth Pro</h3><p>Menus, barra de ferramentas e painel com Lugares e Camadas. Abre .kmz com duplo clique e o Ctrl+S salva no próprio arquivo.</p></div>
-          <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M8 7h8M8 12h8M8 17h5"/></svg></div><h3>Ficha técnica</h3><p>Portas, splitter, PON, fibras, tipo de cabo e situação de cada elemento. A ficha aparece também no balão do Google Earth.</p></div>
-          <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="2.5"/><path d="m10.2 6.3-3.9 3.9"/><circle cx="4.5" cy="12" r="2.5"/><path d="M7 12h10"/><circle cx="19.5" cy="12" r="2.5"/><path d="m13.8 17.7 3.9-3.9"/><circle cx="12" cy="19.5" r="2.5"/></svg></div><h3>Diagrama de fusões</h3><p>Fibras no código de cores, splitters, portas da CTO e PON da OLT. Liga com dois cliques e funde em sequência.</p></div>
-          <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></div><h3>Potência estimada</h3><p>Rastreia a fibra da porta da CTO até a OLT e calcula o sinal: bom, no limite ou abaixo da sensibilidade.</p></div>
-          <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></div><h3>Verificação da rede</h3><p>Encontra pontas de cabo soltas, elementos duplicados, CTOs lotadas e sinal baixo. Um clique leva ao problema.</p></div>
-          <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Equipe e histórico</h3><p>Funções de técnico, projetista e supervisor, mais o histórico de quem alterou o quê e quando, que vai junto no arquivo.</p></div>
+          <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></div><h3>Jeito Google Earth Pro</h3><p>Menus, barra de ferramentas e painel com Lugares e Camadas. Abre .kmz com duplo clique e o Ctrl+S salva no próprio arquivo.</p></div>
+          <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M8 7h8M8 12h8M8 17h5"/></svg></div><h3>Ficha técnica</h3><p>Portas, splitter, PON, fibras, tipo de cabo e situação de cada elemento. A ficha aparece também no balão do Google Earth.</p></div>
+          <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="2.5"/><path d="m10.2 6.3-3.9 3.9"/><circle cx="4.5" cy="12" r="2.5"/><path d="M7 12h10"/><circle cx="19.5" cy="12" r="2.5"/><path d="m13.8 17.7 3.9-3.9"/><circle cx="12" cy="19.5" r="2.5"/></svg></div><h3>Diagrama de fusões</h3><p>Fibras no código de cores, splitters, portas da CTO e PON da OLT. Liga com dois cliques e funde em sequência.</p></div>
+          <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></div><h3>Potência estimada</h3><p>Rastreia a fibra da porta da CTO até a OLT e calcula o sinal: bom, no limite ou abaixo da sensibilidade.</p></div>
+          <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></div><h3>Verificação da rede</h3><p>Encontra pontas de cabo soltas, elementos duplicados, CTOs lotadas e sinal baixo. Um clique leva ao problema.</p></div>
+          <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Equipe e histórico</h3><p>Funções de técnico, projetista e supervisor, mais o histórico de quem alterou o quê e quando, que vai junto no arquivo.</p></div>
         </div>
       </div>
     </section>
 
-    <section class="block" id="instalar">
+    <section class="block suave" id="instalar">
       <div class="wrap">
-        <h2>Como instalar</h2>
-        <p class="sub">Leva menos de um minuto. Seus projetos ficam guardados no computador e continuam lá quando você atualizar.</p>
-        <div class="steps">
-          <div class="step"><h3>Baixe o instalador</h3><p>Clique em <b>Baixar para Windows</b>. O arquivo <code>Sem-Limite-Rede-Setup.exe</code> vai para a pasta Downloads.</p></div>
-          <div class="step"><h3>Execute</h3><p>Dê dois cliques no arquivo e siga as telas. O instalador cria atalhos na área de trabalho e no menu Iniciar.</p></div>
-          <div class="step"><h3>Abra um projeto</h3><p>Use <b>Arquivo › Abrir</b> ou dê dois cliques num arquivo <b>.kmz</b> para abrir direto no programa.</p></div>
+        <div class="titulo">
+          <h2>Como <span>instalar</span></h2>
+          <div class="regua"></div>
+          <p>Leva menos de um minuto. Seus projetos ficam guardados no computador e continuam lá quando você atualizar.</p>
         </div>
-        <div class="note"><b>Aviso do Windows:</b> se aparecer "O Windows protegeu o computador", clique em <b>Mais informações</b> e depois em <b>Executar assim mesmo</b>. Esse aviso aparece com programas novos que ainda não têm assinatura digital paga.</div>
-        <p class="hash">Para conferir se o arquivo chegou inteiro (SHA-256 da versão <span id="hashVer">1.0.0</span>): <code id="hash">c2aa0bc54319c970a441bf898054fa1a5cc38b303dc3102c52818030732ce6ce</code></p>
+        <div class="instalar">
+          <div>
+            <div class="steps">
+              <div class="step"><h3>Baixe o instalador</h3><p>Clique em <b>Baixar para Windows</b>. O arquivo <code>Sem-Limite-Rede-Setup.exe</code> vai para a pasta Downloads.</p></div>
+              <div class="step"><h3>Execute</h3><p>Dê dois cliques no arquivo e siga as telas. O instalador cria atalhos na área de trabalho e no menu Iniciar.</p></div>
+              <div class="step"><h3>Abra um projeto</h3><p>Use <b>Arquivo › Abrir</b> ou dê dois cliques num arquivo <b>.kmz</b> para abrir direto no programa.</p></div>
+            </div>
+            <div class="note"><b>Aviso do Windows:</b> se aparecer "O Windows protegeu o computador", clique em <b>Mais informações</b> e depois em <b>Executar assim mesmo</b>. Esse aviso aparece com programas novos que ainda não têm assinatura digital paga.</div>
+            <p class="hash">Para conferir se o arquivo chegou inteiro (SHA-256 da versão <span id="hashVer">1.0.0</span>): <code id="hash">c2aa0bc54319c970a441bf898054fa1a5cc38b303dc3102c52818030732ce6ce</code></p>
+          </div>
+          <aside class="requisitos">
+            <h3>Requisitos</h3>
+            <ul>
+              <li><svg><use href="#i-check"/></svg>Windows 10 ou 11 (64 bits)</li>
+              <li><svg><use href="#i-check"/></svg>Cerca de 300 MB livres</li>
+              <li><svg><use href="#i-check"/></svg>Abre, desenha e salva sem internet</li>
+              <li><svg><use href="#i-check"/></svg>Internet só para o mapa, Street View e busca de endereço</li>
+            </ul>
+          </aside>
+        </div>
       </div>
     </section>
 
-    <section class="block alt" id="duvidas">
+    <section class="block" id="duvidas">
       <div class="wrap">
-        <h2>Dúvidas frequentes</h2>
-        <p class="sub"></p>
+        <div class="titulo">
+          <h2>Dúvidas <span>frequentes</span></h2>
+          <div class="regua"></div>
+        </div>
         <details class="faq"><summary>Ele abre os arquivos que já temos do Google Earth?</summary><p>Sim. Ele abre e salva KMZ/KML sem perder nada do que o Google Earth gravou. Os dados técnicos ficam dentro do próprio arquivo, e o Google Earth continua abrindo normalmente.</p></details>
         <details class="faq"><summary>Precisa de internet?</summary><p>Só para o fundo do mapa (satélite e ruas), o Street View e a busca de endereço. Abrir, desenhar, editar e salvar funcionam sem internet.</p></details>
         <details class="faq"><summary>Onde ficam os meus projetos?</summary><p>No próprio computador, salvos automaticamente em "Meus projetos". Nada é enviado para servidores. Para mandar a outra pessoa, use o arquivo KMZ.</p></details>
@@ -222,15 +304,16 @@
       </div>
     </section>
 
-    <section class="block final">
+    <section class="final">
+      <svg class="borda-org" aria-hidden="true"><use href="#i-borda"/></svg>
+      <div class="faixa f1"></div>
+      <div class="faixa f2"></div>
       <div class="wrap">
-        <h2>Pronto para começar?</h2>
+        <h2>Pronto para <span>começar?</span></h2>
+        <svg class="zigue" aria-hidden="true"><use href="#i-zigue"/></svg>
         <div class="cta">
-          <a class="btn primary dl" href="https://github.com/DuarteJJ/sem-limite-rede/releases/latest/download/Sem-Limite-Rede-Setup.exe">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>
-            Baixar para Windows
-          </a>
-          <a class="btn ghost" href="https://github.com/DuarteJJ/sem-limite-rede/releases">Ver todas as versões</a>
+          <a class="btn laranja dl" href="https://github.com/DuarteJJ/sem-limite-rede/releases/latest/download/Sem-Limite-Rede-Setup.exe"><svg><use href="#i-down"/></svg>Baixar para Windows</a>
+          <a class="btn vazado" href="https://github.com/DuarteJJ/sem-limite-rede/releases">Todas as versões</a>
         </div>
       </div>
     </section>
@@ -238,8 +321,7 @@
 
   <footer>
     <div class="wrap">
-      <img class="logo-light" src="assets/logo.png" alt="Sem Limite Telecom">
-      <img class="logo-dark" src="assets/logo-branco.png" alt="Sem Limite Telecom">
+      <img src="assets/logo-branco.png" alt="Sem Limite Telecom">
       <span>© <span id="year">2026</span> Sem Limite Telecom · Sem Limite Rede</span>
     </div>
   </footer>
